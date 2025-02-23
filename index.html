@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <style type="text/css">
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family: sans-serif;
+      }
+     
+      /* Contenedor principal */
+      .wrap-container {
+        display: flex;
+        gap: 20px;
+        max-width: 1400px;
+        padding: 0px 20px;
+      }
+
+      /* Barra lateral */
+      aside {
+        width: 350px;
+        background: #f8f8f8;
+        padding: 15px;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+
+      /* Título */
+      nav h2 {
+        text-align: center;
+        font-size: 20px;
+        margin-bottom: 20px;
+      }
+
+      form {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+      }
+
+      /* Grupo de formulario */
+      .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+      }
+
+      .row {
+        display: flex;
+        gap: 10px;
+      }
+
+      .row .form-group {
+        width: 50%;
+      }
+
+      label {
+        font-weight: bold;
+      }
+
+      input,
+      textarea {
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 16px;
+      }
+
+      textarea {
+        resize: none;
+        height: 80px;
+      }
+
+      /* Botones */
+      .btn {
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: 0.3s;
+      }
+
+      .dark{
+        background-color: #000;
+        color: white;
+      }
+
+      .primary{
+        background-color: #007bff;
+        color: #fff;
+      }
+
+      .btn:hover {
+        background: #0056b3;
+      }
+
+      /* Sección donde se renderiza la tabla */
+      main {
+        flex-grow: 1;
+        background: #fff;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        min-height: 400px;
+        text-align: center;
+      }
+      .wrap-info{
+        max-width: 600px;
+        text-align: center;
+        margin: auto auto;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .wrap-info h1 {
+        font-size: 32px;
+        margin-bottom: 10px;
+      }
+
+      .wrap-info p {
+        font-size: 18px;
+        color: #555;
+      } 
+      .wrap-info .comments{
+        font-size: 14px;
+        color: #000;
+      }
+
+      .wrap-table {
+        margin-top: 5px;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        gap: 5px;
+        min-height: 400px;
+      }
+
+      table {
+        border-collapse: collapse;
+        margin: 20px auto;
+        width: 80%;
+        max-width: 500px;
+        font-family: sans-serif;
+      }
+
+      td {
+        border: 1px solid #000;
+        text-align: center;
+        padding: 10px;
+        font-size: 18px;
+        width: 40px;
+        height: 40px;
+      }
+
+      .selected {
+        background-color: red;
+        cursor: pointer;
+        text-decoration: line-through;
+      }
+
+      td:hover {
+        background-color: #f0f0f0;
+        cursor: pointer;
+      }
+    </style>
+
+    <section class="wrap-container">
+      <aside>
+        <nav>
+          <h2>Generador de tablas</h2>
+          <form action="">
+            <div class="form-group">
+              <label for="">Titulo personalizado:</label>
+              <input type="text" placeholder="titulo personalizado" />
+            </div>
+            <div class="form-group">
+              <label for="">Descripción personalizada</label>
+              <textarea name="" id="" placeholder="Descripción"></textarea>
+            </div>
+            <div class="form-group">
+              <label for="">Cantidad de numeros a generar</label>
+              <input
+                type="number"
+                placeholder="cantidad de numeros a generar"
+              />
+            </div>
+            <div class="row">
+              <div class="form-group">
+                <label for="">Valor:</label>
+                <input type="number" placeholder="Valor de la boleta" />
+              </div>
+              <div class="form-group">
+                <label for="">Fecha de la rifa:</label>
+                <input type="date" placeholder="Precio de la boleta" />
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="">Premio:</label>
+              <input type="text" placeholder="Ingrese el premio">
+              <!-- <textarea
+                name=""
+                id=""
+                placeholder="describa el premio"
+              ></textarea> -->
+            </div>
+            <button id="" class="btn primary">Generar</button>
+            <button id="btn-cross-number" class="btn dark" type="button">Tachar Numero</button>
+            <button id="" class="btn primary">Limpiar</button>
+          </form>
+        </nav>
+      </aside>
+      <main>
+        <div class="wrap-info">
+          <h1>Titulo</h1>
+          <p>Descripcion</p>
+          <div class="row">
+            <p>Fecha de la rifa</p>
+            <p>Valor</p>
+          </div>
+        </div>
+        <div class="wrap-table"></div>
+        <div class="wrap-info">
+          <p class="comments">Comentarios</p>
+        </div>
+      </main>
+    </section>
+
+    <script type="">
+      let crossOutNumbers = [0, 50, 29, 99, 30, 85, 41, 42, 43];
+      const btnCrossNumber = document.getElementById("btn-cross-number");
+
+
+      btnCrossNumber.addEventListener("click", function () {
+        let number = parseInt(prompt("Ingrese el numero que quiere tachar: "));
+        if (isNaN(number) || number < 0 || number > 100) {
+          alert("Ingrese un número entre N y N");
+          return;
+        }
+        if(crossOutNumbers.includes(number)){
+          alert("El numero ya se encuentra tachado");
+          return;
+        }
+        
+        if(confirm(`Seguro que quieres tachar el numero ${number}`)){
+          const td = document.querySelectorAll(`td`);
+
+          td.forEach((item) => {
+            if (parseInt(item.textContent) === number) {
+              item.classList.add("selected");
+            }
+          });
+
+          // td.classList.add("selected");
+          crossOutNumbers.push(number);
+  
+          // Guardar en local storage
+          localStorage.setItem("crossOutNumbers", JSON.stringify(crossOutNumbers));         
+
+        }
+
+      });
+      document.addEventListener("DOMContentLoaded", function () {
+        refreshCrossOutNumbers();
+        const form = document.querySelector("form");
+        const tableContainer = document.querySelector(".wrap-table");
+        const mainContainer = document.querySelectorAll(".wrap-info");
+        
+        mainContainer.forEach(div => {
+            div.contentEditable = "true";
+        });
+
+        form.addEventListener("submit", function (e) {
+          e.preventDefault();
+          const totalNumbers = parseInt(
+            document.querySelector(
+              "input[placeholder='cantidad de numeros a generar']"
+            ).value,
+            10
+          );
+
+          if (isNaN(totalNumbers) || totalNumbers <= 0) {
+            alert("Ingrese un número válido");
+            return;
+          }
+
+          generateTable(totalNumbers);
+        });
+        
+        function generateTable(n) {
+          tableContainer.innerHTML = "";
+
+          const columns = Math.ceil(Math.sqrt(n));
+          const rows = Math.ceil(n / columns);
+
+          const table = document.createElement("table");
+          for (let r = 0; r < rows; r++) {
+            const tr = document.createElement("tr");
+            for (let c = 0; c < columns; c++) {
+              const index = r * columns + c;
+              const td = document.createElement("td");
+              crossOutNumbers.includes(index)
+                ? td.classList.add("selected")
+                : td.classList.remove("selected");
+              if (index < n) {
+                td.textContent = index < 10 ? "0" + index : index;
+              }
+              tr.appendChild(td);
+            }
+            table.appendChild(tr);
+          }
+
+          tableContainer.appendChild(table);
+        }
+      });
+
+      refreshCrossOutNumbers=() => {
+        const storedCrossOutNumbers = JSON.parse(localStorage.getItem("crossOutNumbers"));
+        if(storedCrossOutNumbers){
+          crossOutNumbers = storedCrossOutNumbers;
+        }
+      };
+    </script>
+  </body>
+</html>
