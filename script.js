@@ -26,6 +26,7 @@ btnCrossNumber.addEventListener("click", function () {
 
     // Guardar en local storage
     localStorage.setItem("crossOutNumbers", JSON.stringify(crossOutNumbers));
+    // refreshCrossOutNumbers();
   }
 });
 document.addEventListener("DOMContentLoaded", function () {
@@ -34,9 +35,9 @@ document.addEventListener("DOMContentLoaded", function () {
   const tableContainer = document.querySelector(".wrap-table");
   const mainContainer = document.querySelectorAll(".wrap-info");
 
-  mainContainer.forEach((div) => {
-    div.contentEditable = "true";
-  });
+//   mainContainer.forEach((div) => {
+//     div.contentEditable = "true";
+//   });
 
   form.addEventListener("submit", function (e) {
     e.preventDefault();
@@ -52,8 +53,9 @@ document.addEventListener("DOMContentLoaded", function () {
       return;
     }
 
-    generateTable(totalNumbers);
-  });
+    // generateTable(totalNumbers);
+});
+generateTable(100);
 
   function generateTable(n) {
     tableContainer.innerHTML = "";

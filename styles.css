@@ -51,6 +51,12 @@
         width: 50%;
       }
 
+      .row p{
+        width: 70%;
+        margin: auto;
+        text-align: center;
+      }
+
       label {
         font-weight: bold;
       }
@@ -103,11 +109,15 @@
         text-align: center;
       }
       .wrap-info{
-        max-width: 600px;
+        max-width: 500px;
         text-align: center;
-        margin: auto auto;
+        margin: auto auto ;
         align-items: center;
         justify-content: center;
+      }
+
+      .wrap-info:not(:last-child){
+        margin: 45px auto 0px;
       }
 
       .wrap-info h1 {
@@ -160,4 +170,9 @@
       td:hover {
         background-color: #f0f0f0;
         cursor: pointer;
+      }
+
+      /* Responsiveness */
+      @media (max-width: 920px) {
+        aside{display: none;}
       }
