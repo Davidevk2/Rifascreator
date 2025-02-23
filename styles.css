@@ -1,178 +1,193 @@
- * {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-        font-family: sans-serif;
-      }
-     
-      /* Contenedor principal */
-      .wrap-container {
-        display: flex;
-        gap: 20px;
-        max-width: 1400px;
-        padding: 0px 20px;
-      }
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+}
 
-      /* Barra lateral */
-      aside {
-        width: 350px;
-        background: #f8f8f8;
-        padding: 15px;
-        border-radius: 10px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-      }
+/* Contenedor principal */
+.wrap-container {
+  display: flex;
+  gap: 20px;
+  max-width: 1400px;
+  padding: 0px 20px;
+}
 
-      /* Título */
-      nav h2 {
-        text-align: center;
-        font-size: 20px;
-        margin-bottom: 20px;
-      }
+/* Barra lateral */
+aside {
+  width: 350px;
+  background: #f8f8f8;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
 
-      form {
-        display: flex;
-        flex-direction: column;
-        gap: 15px;
-      }
+/* Título */
+nav h2 {
+  text-align: center;
+  font-size: 20px;
+  margin-bottom: 20px;
+}
 
-      /* Grupo de formulario */
-      .form-group {
-        display: flex;
-        flex-direction: column;
-        gap: 5px;
-      }
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
 
-      .row {
-        display: flex;
-        gap: 10px;
-      }
+/* Grupo de formulario */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
 
-      .row .form-group {
-        width: 50%;
-      }
+.row {
+  display: flex;
+  gap: 10px;
+}
 
-      .row p{
-        width: 70%;
-        margin: auto;
-        text-align: center;
-      }
+.row .form-group {
+  width: 50%;
+}
 
-      label {
-        font-weight: bold;
-      }
+.row p {
+  width: 70%;
+  margin: auto;
+  text-align: center;
+}
 
-      input,
-      textarea {
-        padding: 10px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        font-size: 16px;
-      }
+label {
+  font-weight: bold;
+}
 
-      textarea {
-        resize: none;
-        height: 80px;
-      }
+input,
+textarea {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+}
 
-      /* Botones */
-      .btn {
-        padding: 10px;
-        border: none;
-        border-radius: 5px;
-        font-size: 16px;
-        cursor: pointer;
-        transition: 0.3s;
-      }
+textarea {
+  resize: none;
+  height: 80px;
+}
 
-      .dark{
-        background-color: #000;
-        color: white;
-      }
+/* Botones */
+.btn {
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: 0.3s;
+}
 
-      .primary{
-        background-color: #007bff;
-        color: #fff;
-      }
+.dark {
+  background-color: #000;
+  color: white;
+}
 
-      .btn:hover {
-        background: #0056b3;
-      }
+.primary {
+  background-color: #007bff;
+  color: #fff;
+}
 
-      /* Sección donde se renderiza la tabla */
-      main {
-        flex-grow: 1;
-        background: #fff;
-        padding: 20px;
-        border-radius: 10px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        min-height: 400px;
-        text-align: center;
-      }
-      .wrap-info{
-        max-width: 500px;
-        text-align: center;
-        margin: auto auto ;
-        align-items: center;
-        justify-content: center;
-      }
+.btn:hover {
+  background: #0056b3;
+}
 
-      .wrap-info:not(:last-child){
-        margin: 45px auto 0px;
-      }
+/* Sección donde se renderiza la tabla */
+main {
+  flex-grow: 1;
+  background: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  min-height: 400px;
+  text-align: center;
+}
+.wrap-info {
+  max-width: 500px;
+  text-align: center;
+  margin: auto auto;
+  align-items: center;
+  justify-content: center;
+}
 
-      .wrap-info h1 {
-        font-size: 32px;
-        margin-bottom: 10px;
-      }
+.wrap-info:not(:last-child) {
+  margin: 45px auto 0px;
+}
 
-      .wrap-info p {
-        font-size: 18px;
-        color: #555;
-      } 
-      .wrap-info .comments{
-        font-size: 14px;
-        color: #000;
-      }
+.wrap-info h1 {
+  font-size: 32px;
+  margin-bottom: 10px;
+}
 
-      .wrap-table {
-        margin-top: 5px;
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        align-items: center;
-        gap: 5px;
-        min-height: 400px;
-      }
+.wrap-info p {
+  font-size: 18px;
+  color: #555;
+}
+.wrap-info .comments {
+  font-size: 14px;
+  color: #000;
+}
 
-      table {
-        border-collapse: collapse;
-        margin: 20px auto;
-        width: 80%;
-        max-width: 500px;
-        font-family: sans-serif;
-      }
+.wrap-table {
+  margin-top: 5px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  min-height: 400px;
+}
 
-      td {
-        border: 1px solid #000;
-        text-align: center;
-        padding: 10px;
-        font-size: 18px;
-        width: 40px;
-        height: 40px;
-      }
+table {
+  border-collapse: collapse;
+  margin: 20px auto;
+  width: 80%;
+  max-width: 500px;
+  font-family: sans-serif;
+}
 
-      .selected {
-        background-color: red;
-        cursor: pointer;
-        text-decoration: line-through;
-      }
+td {
+  border: 1px solid #000;
+  text-align: center;
+  padding: 10px;
+  font-size: 18px;
+  width: 40px;
+  height: 40px;
+}
 
-      td:hover {
-        background-color: #f0f0f0;
-        cursor: pointer;
-      }
+.selected {
+  background-color: red;
+  cursor: pointer;
+  text-decoration: line-through;
+}
 
-      /* Responsiveness */
-      @media (max-width: 920px) {
-        aside{display: none;}
-      }
+td:hover {
+  background-color: #f0f0f0;
+  cursor: pointer;
+}
+
+/* Responsiveness */
+@media (max-width: 920px) {
+  .wrap-container {
+    padding: 0px 10px;
+    flex-direction: column;
+    gap: 10px;
+  }
+  aside {
+    display: none;
+  }
+  main {
+    width: 100%;
+  }
+  td {
+    height: 25px;
+    font-size: 16px;
+    height: 25px;
+  }
+}
