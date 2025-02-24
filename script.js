@@ -1,6 +1,8 @@
 let crossOutNumbers = [];
 const btnCrossNumber = document.getElementById("btn-cross-number");
 const btnEnableNumber = document.getElementById("btn-enable-number");
+const textTotalAvaliable = document.getElementById("total-available");
+const textTotalSold = document.getElementById("total-sold");
 
 btnEnableNumber.addEventListener("click", function () {
   let number = parseInt(prompt("Ingrese el número que quiere hababilitar: "));
@@ -14,7 +16,7 @@ btnEnableNumber.addEventListener("click", function () {
     return;
   }
 
-  if (confirm(`Seguro que deseas habilitar el número ${number}`)) {
+  if (confirm(`Seguro que deseas habilitar el número ${number} ?`)) {
     const td = document.querySelectorAll(`td`);
     td.forEach((item) => {
       if (parseInt(item.textContent) === number) {
@@ -34,7 +36,7 @@ btnEnableNumber.addEventListener("click", function () {
 btnCrossNumber.addEventListener("click", function () {
   let number = parseInt(prompt("Ingrese el número que quiere tachar: "));
   if (isNaN(number) || number < 0 || number > 100) {
-    alert("Ingrese un número entre N y N");
+    alert("Ingrese un número entre 0 y 100");
     return;
   }
   if (crossOutNumbers.includes(number)) {
@@ -42,7 +44,7 @@ btnCrossNumber.addEventListener("click", function () {
     return;
   }
 
-  if (confirm(`Seguro que quieres tachar el número ${number}`)) {
+  if (confirm(`Seguro que quieres tachar el número ${number} ?`)) {
     const td = document.querySelectorAll(`td`);
 
     td.forEach((item) => {
@@ -60,10 +62,15 @@ btnCrossNumber.addEventListener("click", function () {
 });
 document.addEventListener("DOMContentLoaded", function () {
   refreshCrossOutNumbers();
+  setTotalNumbers();
   const form = document.querySelector("form");
   const tableContainer = document.querySelector(".wrap-table");
   const mainContainer = document.querySelectorAll(".wrap-info");
 
+  mainContainer.forEach((div) => {
+    div.contentEditable = "false";
+  });
+  
   form.addEventListener("submit", function (e) {
     e.preventDefault();
     const totalNumbers = parseInt(
@@ -116,9 +123,19 @@ const refreshCrossOutNumbers = () => {
   if (storedCrossOutNumbers) {
     crossOutNumbers = storedCrossOutNumbers;
   }
+  setTotalNumbers();
 };
 
 const setCrossOutNumbers = (numbers) => {
   localStorage.setItem("crossOutNumbers", JSON.stringify(numbers));
   refreshCrossOutNumbers();
 };
+
+
+const setTotalNumbers =()=>{
+  let totalCrossOutNumber =crossOutNumbers.length;
+  let totalAvailableNumbers = 100 - totalCrossOutNumber;
+
+  textTotalAvaliable.innerText = totalAvailableNumbers;
+  textTotalSold.innerText = totalCrossOutNumber;
+}
