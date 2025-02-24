@@ -1,7 +1,8 @@
 let crossOutNumbers = [];
 const btnCrossNumber = document.getElementById("btn-cross-number");
 const btnEnableNumber = document.getElementById("btn-enable-number");
-const textTotalAvaliable = document.getElementById("total-available");
+const btnRebootTable = document.getElementById("btn-reboot-table");
+const textTotalAvailable = document.getElementById("total-available");
 const textTotalSold = document.getElementById("total-sold");
 
 btnEnableNumber.addEventListener("click", function () {
@@ -17,12 +18,12 @@ btnEnableNumber.addEventListener("click", function () {
   }
 
   if (confirm(`Seguro que deseas habilitar el número ${number} ?`)) {
-    const td = document.querySelectorAll(`td`);
-    td.forEach((item) => {
-      if (parseInt(item.textContent) === number) {
-        item.classList.remove("selected");
-      }
-    });
+     const td = document.querySelector(`td[data-number="${number}"]`);
+
+     if (td) {
+       td.classList.remove("selected");
+     }
+
     let indexNumber = crossOutNumbers.indexOf(number);
     if (indexNumber > -1) {
       crossOutNumbers.splice(indexNumber, 1);
@@ -45,19 +46,29 @@ btnCrossNumber.addEventListener("click", function () {
   }
 
   if (confirm(`Seguro que quieres tachar el número ${number} ?`)) {
-    const td = document.querySelectorAll(`td`);
+    const td = document.querySelector(`td[data-number="${number}"]`);
 
-    td.forEach((item) => {
-      if (parseInt(item.textContent) === number) {
-        item.classList.add("selected");
-      }
-    });
+    if(td){
+      td.classList.add("selected");
+    }
 
-    // td.classList.add("selected");
     crossOutNumbers.push(number);
 
     // Guardar en local storage
     setCrossOutNumbers(crossOutNumbers);
+  }
+});
+
+btnRebootTable.addEventListener("click", function () {
+  if (confirm("Seguro que deseas reiniciar la tabla y limpiar los tachados?")) {
+    const td = document.querySelectorAll(`td`);
+    td.forEach((item) => {
+      item.classList.remove("selected");
+    });
+    crossOutNumbers = [];
+    // Guardar en local storage
+    setCrossOutNumbers(crossOutNumbers);
+    setTotalNumbers();
   }
 });
 document.addEventListener("DOMContentLoaded", function () {
@@ -70,7 +81,7 @@ document.addEventListener("DOMContentLoaded", function () {
   mainContainer.forEach((div) => {
     div.contentEditable = "false";
   });
-  
+
   form.addEventListener("submit", function (e) {
     e.preventDefault();
     const totalNumbers = parseInt(
@@ -88,13 +99,13 @@ document.addEventListener("DOMContentLoaded", function () {
     // generateTable(totalNumbers);
   });
   generateTable(100);
-
+  
   function generateTable(n) {
     tableContainer.innerHTML = "";
-
+  
     const columns = Math.ceil(Math.sqrt(n));
     const rows = Math.ceil(n / columns);
-
+  
     const table = document.createElement("table");
     for (let r = 0; r < rows; r++) {
       const tr = document.createElement("tr");
@@ -105,37 +116,39 @@ document.addEventListener("DOMContentLoaded", function () {
           ? td.classList.add("selected")
           : td.classList.remove("selected");
         if (index < n) {
+          td.setAttribute("data-number", index);
           td.textContent = index < 10 ? "0" + index : index;
         }
         tr.appendChild(td);
       }
       table.appendChild(tr);
     }
-
+  
     tableContainer.appendChild(table);
   }
 });
 
 const refreshCrossOutNumbers = () => {
-  const storedCrossOutNumbers = JSON.parse(
-    localStorage.getItem("crossOutNumbers")
-  );
-  if (storedCrossOutNumbers) {
-    crossOutNumbers = storedCrossOutNumbers;
-  }
-  setTotalNumbers();
+  const storedCrossOutNumbers = JSON.parse(localStorage.getItem("crossOutNumbers"));
+
+  crossOutNumbers = storedCrossOutNumbers || [];
+
+  // if (storedCrossOutNumbers) {
+  //   crossOutNumbers = storedCrossOutNumbers;
+  // }
+  // setTotalNumbers();
 };
 
 const setCrossOutNumbers = (numbers) => {
   localStorage.setItem("crossOutNumbers", JSON.stringify(numbers));
-  refreshCrossOutNumbers();
+  setTotalNumbers();
 };
 
 
 const setTotalNumbers =()=>{
-  let totalCrossOutNumber =crossOutNumbers.length;
-  let totalAvailableNumbers = 100 - totalCrossOutNumber;
+  let totalCrossedOutNumber =crossOutNumbers.length;
+  let totalAvailableNumbers = 100 - totalCrossedOutNumber;
 
-  textTotalAvaliable.innerText = totalAvailableNumbers;
-  textTotalSold.innerText = totalCrossOutNumber;
+  textTotalAvailable.innerText = totalAvailableNumbers;
+  textTotalSold.innerText = totalCrossedOutNumber;
 }

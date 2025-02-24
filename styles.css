@@ -89,12 +89,17 @@ textarea {
   color: white;
 }
 
+.grey {
+  background-color:#e7e7e7 ;
+  color: #000;
+}
+
 .primary {
   background-color: #007bff;
   color: #fff;
 }
 
-.btn:hover {
+.primary:hover {
   background: #0056b3;
 }
 
