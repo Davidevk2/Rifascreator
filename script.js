@@ -1,18 +1,50 @@
 let crossOutNumbers = [];
 const btnCrossNumber = document.getElementById("btn-cross-number");
+const btnEnableNumber = document.getElementById("btn-enable-number");
+const textTotalAvaliable = document.getElementById("total-available");
+const textTotalSold = document.getElementById("total-sold");
+
+btnEnableNumber.addEventListener("click", function () {
+  let number = parseInt(prompt("Ingrese el número que quiere hababilitar: "));
+  if (isNaN(number) || number < 0 || number > 100) {
+    alert("Ingrese un número entre 0 y 100");
+    return;
+  }
+
+  if (!crossOutNumbers.includes(number)) {
+    alert(`El número ${number} no está tachado`);
+    return;
+  }
+
+  if (confirm(`Seguro que deseas habilitar el número ${number} ?`)) {
+    const td = document.querySelectorAll(`td`);
+    td.forEach((item) => {
+      if (parseInt(item.textContent) === number) {
+        item.classList.remove("selected");
+      }
+    });
+    let indexNumber = crossOutNumbers.indexOf(number);
+    if (indexNumber > -1) {
+      crossOutNumbers.splice(indexNumber, 1);
+    }
+
+    // Guardar en local storage
+    setCrossOutNumbers(crossOutNumbers);
+  }
+});
 
 btnCrossNumber.addEventListener("click", function () {
-  let number = parseInt(prompt("Ingrese el numero que quiere tachar: "));
+  let number = parseInt(prompt("Ingrese el número que quiere tachar: "));
   if (isNaN(number) || number < 0 || number > 100) {
-    alert("Ingrese un número entre N y N");
+    alert("Ingrese un número entre 0 y 100");
     return;
   }
   if (crossOutNumbers.includes(number)) {
-    alert("El numero ya se encuentra tachado");
+    alert("El número ya se encuentra tachado");
     return;
   }
 
-  if (confirm(`Seguro que quieres tachar el numero ${number}`)) {
+  if (confirm(`Seguro que quieres tachar el número ${number} ?`)) {
     const td = document.querySelectorAll(`td`);
 
     td.forEach((item) => {
@@ -25,25 +57,25 @@ btnCrossNumber.addEventListener("click", function () {
     crossOutNumbers.push(number);
 
     // Guardar en local storage
-    localStorage.setItem("crossOutNumbers", JSON.stringify(crossOutNumbers));
-    // refreshCrossOutNumbers();
+    setCrossOutNumbers(crossOutNumbers);
   }
 });
 document.addEventListener("DOMContentLoaded", function () {
   refreshCrossOutNumbers();
+  setTotalNumbers();
   const form = document.querySelector("form");
   const tableContainer = document.querySelector(".wrap-table");
   const mainContainer = document.querySelectorAll(".wrap-info");
 
-//   mainContainer.forEach((div) => {
-//     div.contentEditable = "true";
-//   });
-
+  mainContainer.forEach((div) => {
+    div.contentEditable = "false";
+  });
+  
   form.addEventListener("submit", function (e) {
     e.preventDefault();
     const totalNumbers = parseInt(
       document.querySelector(
-        "input[placeholder='cantidad de numeros a generar']"
+        "input[placeholder='cantidad de números a generar']"
       ).value,
       10
     );
@@ -54,8 +86,8 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // generateTable(totalNumbers);
-});
-generateTable(100);
+  });
+  generateTable(100);
 
   function generateTable(n) {
     tableContainer.innerHTML = "";
@@ -84,11 +116,26 @@ generateTable(100);
   }
 });
 
-refreshCrossOutNumbers = () => {
+const refreshCrossOutNumbers = () => {
   const storedCrossOutNumbers = JSON.parse(
     localStorage.getItem("crossOutNumbers")
   );
   if (storedCrossOutNumbers) {
     crossOutNumbers = storedCrossOutNumbers;
   }
+  setTotalNumbers();
 };
+
+const setCrossOutNumbers = (numbers) => {
+  localStorage.setItem("crossOutNumbers", JSON.stringify(numbers));
+  refreshCrossOutNumbers();
+};
+
+
+const setTotalNumbers =()=>{
+  let totalCrossOutNumber =crossOutNumbers.length;
+  let totalAvailableNumbers = 100 - totalCrossOutNumber;
+
+  textTotalAvaliable.innerText = totalAvailableNumbers;
+  textTotalSold.innerText = totalCrossOutNumber;
+}
