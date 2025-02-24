@@ -1,7 +1,8 @@
 let crossOutNumbers = [];
 const btnCrossNumber = document.getElementById("btn-cross-number");
 const btnEnableNumber = document.getElementById("btn-enable-number");
-const textTotalAvaliable = document.getElementById("total-available");
+const btnRebootTable = document.getElementById("btn-reboot-table");
+const textTotalAvailable = document.getElementById("total-available");
 const textTotalSold = document.getElementById("total-sold");
 
 btnEnableNumber.addEventListener("click", function () {
@@ -60,6 +61,19 @@ btnCrossNumber.addEventListener("click", function () {
     setCrossOutNumbers(crossOutNumbers);
   }
 });
+
+btnRebootTable.addEventListener("click", function () {
+  if (confirm("Seguro que deseas reiniciar la tabla y limpiar los tachados?")) {
+    const td = document.querySelectorAll(`td`);
+    td.forEach((item) => {
+      item.classList.remove("selected");
+    });
+    crossOutNumbers = [];
+    // Guardar en local storage
+    setCrossOutNumbers(crossOutNumbers);
+    setTotalNumbers();
+  }
+});
 document.addEventListener("DOMContentLoaded", function () {
   refreshCrossOutNumbers();
   setTotalNumbers();
@@ -70,7 +84,7 @@ document.addEventListener("DOMContentLoaded", function () {
   mainContainer.forEach((div) => {
     div.contentEditable = "false";
   });
-  
+
   form.addEventListener("submit", function (e) {
     e.preventDefault();
     const totalNumbers = parseInt(
@@ -133,9 +147,9 @@ const setCrossOutNumbers = (numbers) => {
 
 
 const setTotalNumbers =()=>{
-  let totalCrossOutNumber =crossOutNumbers.length;
-  let totalAvailableNumbers = 100 - totalCrossOutNumber;
+  let totalCrossedOutNumber =crossOutNumbers.length;
+  let totalAvailableNumbers = 100 - totalCrossedOutNumber;
 
-  textTotalAvaliable.innerText = totalAvailableNumbers;
-  textTotalSold.innerText = totalCrossOutNumber;
+  textTotalAvailable.innerText = totalAvailableNumbers;
+  textTotalSold.innerText = totalCrossedOutNumber;
 }
