@@ -18,12 +18,12 @@ btnEnableNumber.addEventListener("click", function () {
   }
 
   if (confirm(`Seguro que deseas habilitar el número ${number} ?`)) {
-    const td = document.querySelectorAll(`td`);
-    td.forEach((item) => {
-      if (parseInt(item.textContent) === number) {
-        item.classList.remove("selected");
-      }
-    });
+     const td = document.querySelector(`td[data-number="${number}"]`);
+
+     if (td) {
+       td.classList.remove("selected");
+     }
+
     let indexNumber = crossOutNumbers.indexOf(number);
     if (indexNumber > -1) {
       crossOutNumbers.splice(indexNumber, 1);
@@ -46,15 +46,12 @@ btnCrossNumber.addEventListener("click", function () {
   }
 
   if (confirm(`Seguro que quieres tachar el número ${number} ?`)) {
-    const td = document.querySelectorAll(`td`);
+    const td = document.querySelector(`td[data-number="${number}"]`);
 
-    td.forEach((item) => {
-      if (parseInt(item.textContent) === number) {
-        item.classList.add("selected");
-      }
-    });
+    if(td){
+      td.classList.add("selected");
+    }
 
-    // td.classList.add("selected");
     crossOutNumbers.push(number);
 
     // Guardar en local storage
@@ -102,13 +99,13 @@ document.addEventListener("DOMContentLoaded", function () {
     // generateTable(totalNumbers);
   });
   generateTable(100);
-
+  
   function generateTable(n) {
     tableContainer.innerHTML = "";
-
+  
     const columns = Math.ceil(Math.sqrt(n));
     const rows = Math.ceil(n / columns);
-
+  
     const table = document.createElement("table");
     for (let r = 0; r < rows; r++) {
       const tr = document.createElement("tr");
@@ -119,30 +116,32 @@ document.addEventListener("DOMContentLoaded", function () {
           ? td.classList.add("selected")
           : td.classList.remove("selected");
         if (index < n) {
+          td.setAttribute("data-number", index);
           td.textContent = index < 10 ? "0" + index : index;
         }
         tr.appendChild(td);
       }
       table.appendChild(tr);
     }
-
+  
     tableContainer.appendChild(table);
   }
 });
 
 const refreshCrossOutNumbers = () => {
-  const storedCrossOutNumbers = JSON.parse(
-    localStorage.getItem("crossOutNumbers")
-  );
-  if (storedCrossOutNumbers) {
-    crossOutNumbers = storedCrossOutNumbers;
-  }
-  setTotalNumbers();
+  const storedCrossOutNumbers = JSON.parse(localStorage.getItem("crossOutNumbers"));
+
+  crossOutNumbers = storedCrossOutNumbers || [];
+
+  // if (storedCrossOutNumbers) {
+  //   crossOutNumbers = storedCrossOutNumbers;
+  // }
+  // setTotalNumbers();
 };
 
 const setCrossOutNumbers = (numbers) => {
   localStorage.setItem("crossOutNumbers", JSON.stringify(numbers));
-  refreshCrossOutNumbers();
+  setTotalNumbers();
 };
 
 
