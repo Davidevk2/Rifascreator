@@ -107,11 +107,17 @@ textarea {
 main {
   flex-grow: 1;
   background: #fff;
-  padding: 20px;
+  padding: 10px;
   border-radius: 10px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   min-height: 400px;
   text-align: center;
+}
+
+.wrapper-img{
+  width: 100%;
+  margin-top: 20px;
+  padding: 25px 0px;
 }
 
 .wrap-details{
@@ -151,7 +157,7 @@ main {
 }
 
 .wrap-info:not(:last-child) {
-  margin: 45px auto 0px;
+  margin: 5px auto 0px;
 }
 
 .wrap-info h1 {
