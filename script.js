@@ -4,6 +4,22 @@ const btnEnableNumber = document.getElementById("btn-enable-number");
 const btnRebootTable = document.getElementById("btn-reboot-table");
 const textTotalAvailable = document.getElementById("total-available");
 const textTotalSold = document.getElementById("total-sold");
+const form = document.querySelector("#form");
+const tableContainer = document.querySelector(".wrap-table");
+const mainContainer = document.querySelectorAll(".wrap-info");
+
+document.addEventListener("DOMContentLoaded", function () {
+  refreshCrossOutNumbers();
+  setTotalNumbers();
+
+  setCurrenData();
+
+  mainContainer.forEach((div) => {
+    div.contentEditable = "false";
+  });
+
+  // generateTable(100);
+});
 
 btnEnableNumber.addEventListener("click", function () {
   let number = parseInt(prompt("Ingrese el número que quiere hababilitar: "));
@@ -71,62 +87,84 @@ btnRebootTable.addEventListener("click", function () {
     setTotalNumbers();
   }
 });
-document.addEventListener("DOMContentLoaded", function () {
-  refreshCrossOutNumbers();
-  setTotalNumbers();
-  const form = document.querySelector("form");
-  const tableContainer = document.querySelector(".wrap-table");
-  const mainContainer = document.querySelectorAll(".wrap-info");
 
-  mainContainer.forEach((div) => {
-    div.contentEditable = "false";
-  });
+form.addEventListener("submit", function (e) {
+  e.preventDefault();
 
-  form.addEventListener("submit", function (e) {
-    e.preventDefault();
-    const totalNumbers = parseInt(
-      document.querySelector(
-        "input[placeholder='cantidad de números a generar']"
-      ).value,
-      10
-    );
+  var formData = new FormData(form);
+  const title = formData.get("title");
+  const description = formData.get("description");
+  const totalNumbers = formData.get("total-numbers");
+  const ticketValue = formData.get("ticket-value");
+  const prize = formData.get("prize");
+  const date = formData.get("date");
 
-    if (isNaN(totalNumbers) || totalNumbers <= 0) {
-      alert("Ingrese un número válido");
-      return;
-    }
-
-    // generateTable(totalNumbers);
-  });
-  generateTable(100);
+  console.log(description, totalNumbers
+, ticketValue);
   
-  function generateTable(n) {
-    tableContainer.innerHTML = "";
-  
-    const columns = Math.ceil(Math.sqrt(n));
-    const rows = Math.ceil(n / columns);
-  
-    const table = document.createElement("table");
-    for (let r = 0; r < rows; r++) {
-      const tr = document.createElement("tr");
-      for (let c = 0; c < columns; c++) {
-        const index = r * columns + c;
-        const td = document.createElement("td");
-        crossOutNumbers.includes(index)
-          ? td.classList.add("selected")
-          : td.classList.remove("selected");
-        if (index < n) {
-          td.setAttribute("data-number", index);
-          td.textContent = index < 10 ? "0" + index : index;
-        }
-        tr.appendChild(td);
-      }
-      table.appendChild(tr);
-    }
-  
-    tableContainer.appendChild(table);
+  if (title === "" || description === "" || totalNumbers === "" || ticketValue === "" || prize === "" || date === "") {
+    alert("Todos los campos son obligatorios");
+    return;
   }
+
+  if (isNaN(totalNumbers
+) || totalNumbers
+ <= 0) {
+      alert("Ingrese una cantidad válida de números");
+      return;
+  }
+
+  if(isNaN(ticketValue) || ticketValue <= 0) {
+    alert("Ingrese un valor válido para el valor del boleto");
+    return;
+  }
+
+
+  const info = {
+    title,
+    description,
+    totalNumbers,
+    ticketValue,
+    prize,
+    date,
+    startFromZero: true,
+    crossOutNumbers: [],
+    
+  };
+  localStorage.setItem("info", JSON.stringify(info));
+  setCurrenData();
+  cleanFormData();
+  formData.forEach((item) => {
+    item.valueOf = "";
+  });
+
 });
+function generateTable(n) {
+  tableContainer.innerHTML = "";
+
+  const columns = Math.ceil(Math.sqrt(n));
+  const rows = Math.ceil(n / columns);
+
+  const table = document.createElement("table");
+  for (let r = 0; r < rows; r++) {
+    const tr = document.createElement("tr");
+    for (let c = 0; c < columns; c++) {
+      const index = r * columns + c;
+      const td = document.createElement("td");
+      crossOutNumbers.includes(index)
+        ? td.classList.add("selected")
+        : td.classList.remove("selected");
+      if (index < n) {
+        td.setAttribute("data-number", index);
+        td.textContent = index < 10 ? "0" + index : index;
+      }
+      tr.appendChild(td);
+    }
+    table.appendChild(tr);
+  }
+
+  tableContainer.appendChild(table);
+}
 
 const refreshCrossOutNumbers = () => {
   const storedCrossOutNumbers = JSON.parse(localStorage.getItem("crossOutNumbers"));
@@ -145,10 +183,33 @@ const setCrossOutNumbers = (numbers) => {
 };
 
 
+const setCurrenData = () => {
+
+  const storedInfo = JSON.parse(localStorage.getItem("info"));
+  if(storedInfo){
+    const { title, description, totalNumbers, ticketValue, prize, date } = storedInfo;
+    const containersForInfo = document.querySelectorAll(".current-info");
+    containersForInfo[0].innerText = title;
+    containersForInfo[1].innerHTML = description;
+    containersForInfo[2].innerText = `Fecha de cierre: ${date}`;
+    containersForInfo[3].innerText = `Premio: ${prize}`;
+    // containersForInfo[3].innerText = `Valor del boleto: $${ticketValue}`;
+    // containersForInfo[2].innerText = `Total números: ${totalNumbers}`;
+    generateTable(totalNumbers);
+    setTotalNumbers();
+  }
+}
+
 const setTotalNumbers =()=>{
   let totalCrossedOutNumber =crossOutNumbers.length;
   let totalAvailableNumbers = 100 - totalCrossedOutNumber;
 
   textTotalAvailable.innerText = totalAvailableNumbers;
   textTotalSold.innerText = totalCrossedOutNumber;
+}
+
+const cleanFormData =()=>{
+  formData.forEach(item=>{
+    item.value = "";
+  })
 }
