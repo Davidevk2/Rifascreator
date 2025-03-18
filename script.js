@@ -7,12 +7,17 @@ const form = document.querySelector("#form");
 const tableContainer = document.querySelector(".wrap-table");
 const mainContainer = document.querySelectorAll(".wrap-info");
 
+const formContainer = document.getElementById("form-container");
+const fullContainer = document.getElementById("main-container");
+
 let currentInfo = null;
 
 document.addEventListener("DOMContentLoaded", function () {
+  updateVisibility();
   refreshCrossOutNumbers();
   setTotalNumbers();
   setCurrentData();
+
 
   mainContainer.forEach((div) => {
     div.contentEditable = "false";
@@ -20,6 +25,22 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // generateTable(100);
 });
+
+const updateVisibility = () =>{
+  const tableGenerated = localStorage.getItem("tableGenerated");
+
+  if(window.innerWidth <= 768){
+      if(tableGenerated){
+        formContainer.style.display = "none";
+        fullContainer.style.display = "block";
+      }else{
+        formContainer.style.display= "block";
+        fullContainer.style.display = "none";
+      }
+
+  }
+
+}
 
 btnEnableNumber.addEventListener("click", function () {
   let currentInfo = getCurrentInfo();
