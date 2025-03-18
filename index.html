@@ -11,35 +11,36 @@
       <aside>
         <nav>
           <h2>Generador de tablas</h2>
-          <form action="">
+          <form action="" id="form" class="">
             <div class="form-group">
               <label for="">Titulo personalizado:</label>
-              <input type="text" placeholder="titulo personalizado" />
+              <input type="text" name="title" placeholder="titulo personalizado" />
             </div>
             <div class="form-group">
               <label for="">Descripción personalizada</label>
-              <textarea name="" id="" placeholder="Descripción"></textarea>
+              <textarea name="description" id="" placeholder="Descripción"></textarea>
             </div>
             <div class="form-group">
               <label for="">Cantidad de números a generar</label>
               <input
                 type="number"
+                name="total-numbers" id=""
                 placeholder="cantidad de números a generar"
               />
             </div>
             <div class="row">
               <div class="form-group">
                 <label for="">Valor:</label>
-                <input type="number" placeholder="Valor de la boleta" />
+                <input type="number" name="ticket-value" placeholder="Valor de la boleta" />
               </div>
               <div class="form-group">
                 <label for="">Fecha de la rifa:</label>
-                <input type="date" placeholder="Precio de la boleta" />
+                <input type="date" name="date" placeholder="Precio de la boleta" />
               </div>
             </div>
             <div class="form-group">
               <label for="">Premio:</label>
-              <input type="text" placeholder="Ingrese el premio">
+              <input type="text" name="prize" placeholder="Ingrese el premio">
               <!-- <textarea
                 name=""
                 id=""
