@@ -123,7 +123,6 @@ form.addEventListener("submit", function (e) {
     return;
   }
 
-
   const info = {
     title,
     description,
@@ -143,7 +142,10 @@ form.addEventListener("submit", function (e) {
   });
 
 });
+
 function generateTable(n) {
+  let currentInfo = getCurrentInfo();
+  let crossOutNumbers = currentInfo.crossOutNumbers;
   tableContainer.innerHTML = "";
 
   const columns = Math.ceil(Math.sqrt(n));
@@ -172,7 +174,7 @@ function generateTable(n) {
 
 const refreshCrossOutNumbers = () => {
   let currentInfo = getCurrentInfo();
-  crossOutNumbers = currentInfo?.crossOutNumbers || [];
+  return currentInfo?.crossOutNumbers || [];
 };
 
 const setCrossOutNumbers = (numbers) => {
@@ -182,8 +184,7 @@ const setCrossOutNumbers = (numbers) => {
     currentInfo.crossOutNumbers = numbers;
     localStorage.setItem('info', JSON.stringify(currentInfo));
   }
-  // setCrossOutNumbers(numbers);
-  // localStorage.setItem("crossOutNumbers", JSON.stringify(numbers));
+ 
   setTotalNumbers();
 };
 
