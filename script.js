@@ -1,4 +1,3 @@
-let crossOutNumbers = [];
 const btnCrossNumber = document.getElementById("btn-cross-number");
 const btnEnableNumber = document.getElementById("btn-enable-number");
 const btnRebootTable = document.getElementById("btn-reboot-table");
@@ -8,11 +7,12 @@ const form = document.querySelector("#form");
 const tableContainer = document.querySelector(".wrap-table");
 const mainContainer = document.querySelectorAll(".wrap-info");
 
+let currentInfo = null;
+
 document.addEventListener("DOMContentLoaded", function () {
   refreshCrossOutNumbers();
   setTotalNumbers();
-
-  setCurrenData();
+  setCurrentData();
 
   mainContainer.forEach((div) => {
     div.contentEditable = "false";
@@ -22,6 +22,8 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 btnEnableNumber.addEventListener("click", function () {
+  let currentInfo = getCurrentInfo();
+  let crossOutNumbers = currentInfo.crossOutNumbers;
   let number = parseInt(prompt("Ingrese el número que quiere hababilitar: "));
   if (isNaN(number) || number < 0 || number > 100) {
     alert("Ingrese un número entre 0 y 100");
@@ -51,6 +53,8 @@ btnEnableNumber.addEventListener("click", function () {
 });
 
 btnCrossNumber.addEventListener("click", function () {
+  let currentInfo = getCurrentInfo();
+  
   let number = parseInt(prompt("Ingrese el número que quiere tachar: "));
   if (isNaN(number) || number < 0 || number > 100) {
     alert("Ingrese un número entre 0 y 100");
@@ -68,10 +72,10 @@ btnCrossNumber.addEventListener("click", function () {
       td.classList.add("selected");
     }
 
-    crossOutNumbers.push(number);
+    currentInfo.crossOutNumbers.push(number);
 
     // Guardar en local storage
-    setCrossOutNumbers(crossOutNumbers);
+    setCrossOutNumbers(currentInfo.crossOutNumbers);
   }
 });
 
@@ -132,7 +136,7 @@ form.addEventListener("submit", function (e) {
     
   };
   localStorage.setItem("info", JSON.stringify(info));
-  setCurrenData();
+  setCurrentData();
   cleanFormData();
   formData.forEach((item) => {
     item.valueOf = "";
@@ -167,25 +171,26 @@ function generateTable(n) {
 }
 
 const refreshCrossOutNumbers = () => {
-  const storedCrossOutNumbers = JSON.parse(localStorage.getItem("crossOutNumbers"));
-
-  crossOutNumbers = storedCrossOutNumbers || [];
-
-  // if (storedCrossOutNumbers) {
-  //   crossOutNumbers = storedCrossOutNumbers;
-  // }
-  // setTotalNumbers();
+  let currentInfo = getCurrentInfo();
+  crossOutNumbers = currentInfo?.crossOutNumbers || [];
 };
 
 const setCrossOutNumbers = (numbers) => {
-  localStorage.setItem("crossOutNumbers", JSON.stringify(numbers));
+
+  let currentInfo = getCurrentInfo();
+  if(currentInfo){
+    currentInfo.crossOutNumbers = numbers;
+    localStorage.setItem('info', JSON.stringify(currentInfo));
+  }
+  // setCrossOutNumbers(numbers);
+  // localStorage.setItem("crossOutNumbers", JSON.stringify(numbers));
   setTotalNumbers();
 };
 
 
-const setCurrenData = () => {
+const setCurrentData = () => {
 
-  const storedInfo = JSON.parse(localStorage.getItem("info"));
+  const storedInfo = getCurrentInfo();
   if(storedInfo){
     const { title, description, totalNumbers, ticketValue, prize, date } = storedInfo;
     const containersForInfo = document.querySelectorAll(".current-info");
@@ -201,8 +206,12 @@ const setCurrenData = () => {
 }
 
 const setTotalNumbers =()=>{
-  let totalCrossedOutNumber =crossOutNumbers.length;
+  let currentInfo = getCurrentInfo();
+  let totalCrossedOutNumber = currentInfo.crossOutNumbers.length;
   let totalAvailableNumbers = 100 - totalCrossedOutNumber;
+  
+  // let totalCrossedOutNumber =crossOutNumbers.length;
+  // let totalAvailableNumbers = 100 - totalCrossedOutNumber;
 
   textTotalAvailable.innerText = totalAvailableNumbers;
   textTotalSold.innerText = totalCrossedOutNumber;
@@ -212,4 +221,16 @@ const cleanFormData =()=>{
   formData.forEach(item=>{
     item.value = "";
   })
+}
+
+const getCurrentInfo = ()=>{
+  if(!currentInfo){
+    cachedInfo = JSON.parse(localStorage.getItem("info"));
+  }
+  return cachedInfo;
+}
+
+const updateLocalStorage = (info)=>{
+  cachedInfo = info;
+  localStorage.setItem("info", JSON.stringify(info));
 }
