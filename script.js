@@ -1,6 +1,7 @@
 const btnCrossNumber = document.getElementById("btn-cross-number");
 const btnEnableNumber = document.getElementById("btn-enable-number");
 const btnRebootTable = document.getElementById("btn-reboot-table");
+const btnToggleSidebar = document.getElementById("btn-toggle-sidebar");
 const textTotalAvailable = document.getElementById("total-available");
 const textTotalSold = document.getElementById("total-sold");
 const form = document.querySelector("#form");
@@ -13,7 +14,7 @@ const fullContainer = document.getElementById("main-container");
 let currentInfo = null;
 
 document.addEventListener("DOMContentLoaded", function () {
-  updateVisibility();
+  updateFormVisibility();
   refreshCrossOutNumbers();
   setTotalNumbers();
   setCurrentData();
@@ -26,20 +27,14 @@ document.addEventListener("DOMContentLoaded", function () {
   // generateTable(100);
 });
 
-const updateVisibility = () =>{
+const updateFormVisibility = () =>{
   const tableGenerated = localStorage.getItem("tableGenerated");
-
   if(window.innerWidth <= 768){
-      if(tableGenerated){
-        formContainer.style.display = "none";
-        fullContainer.style.display = "block";
-      }else{
-        formContainer.style.display= "block";
-        fullContainer.style.display = "none";
-      }
+    if(tableGenerated){
+      formContainer.classList.toggle("active");
+    }
 
   }
-
 }
 
 btnEnableNumber.addEventListener("click", function () {
@@ -111,6 +106,13 @@ btnRebootTable.addEventListener("click", function () {
     setCrossOutNumbers(crossOutNumbers);
     setTotalNumbers();
   }
+});
+
+btnToggleSidebar.addEventListener("click", () => {
+  formContainer.classList.toggle("active");
+  btnToggleSidebar.innerHTML = formContainer.classList.contains("active")
+    ? "&langle;"
+    : "☰";
 });
 
 form.addEventListener("submit", function (e) {
