@@ -1,5 +1,6 @@
 const btnCrossNumber = document.getElementById("btn-cross-number");
 const btnEnableNumber = document.getElementById("btn-enable-number");
+const btnCleanForm = document.getElementById("btn-clean-form");
 const btnRebootTable = document.getElementById("btn-reboot-table");
 const btnToggleSidebar = document.getElementById("btn-toggle-sidebar");
 const textTotalAvailable = document.getElementById("total-available");
@@ -12,13 +13,13 @@ const formContainer = document.getElementById("form-container");
 const fullContainer = document.getElementById("main-container");
 
 let currentInfo = null;
+let formData;
 
 document.addEventListener("DOMContentLoaded", function () {
   updateFormVisibility();
   refreshCrossOutNumbers();
   setTotalNumbers();
   setCurrentData();
-
 
   mainContainer.forEach((div) => {
     div.contentEditable = "false";
@@ -29,11 +30,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
 const updateFormVisibility = () =>{
   const tableGenerated = localStorage.getItem("tableGenerated");
+  
   if(window.innerWidth <= 768){
     if(tableGenerated){
       formContainer.classList.toggle("active");
     }
-
   }
 }
 
@@ -69,14 +70,14 @@ btnEnableNumber.addEventListener("click", function () {
 });
 
 btnCrossNumber.addEventListener("click", function () {
-  let currentInfo = getCurrentInfo();
+  currentInfo = getCurrentInfo();
   
   let number = parseInt(prompt("Ingrese el número que quiere tachar: "));
   if (isNaN(number) || number < 0 || number > 100) {
     alert("Ingrese un número entre 0 y 100");
     return;
   }
-  if (crossOutNumbers.includes(number)) {
+  if (currentInfo.crossOutNumbers.includes(number)) {
     alert("El número ya se encuentra tachado");
     return;
   }
@@ -96,17 +97,27 @@ btnCrossNumber.addEventListener("click", function () {
 });
 
 btnRebootTable.addEventListener("click", function () {
-  if (confirm("Seguro que deseas reiniciar la tabla y limpiar los tachados?")) {
+  if (
+    confirm(
+      "Seguro que deseas reiniciar la tabla y limpiar los números tachados?"
+    )
+  ) {
     const td = document.querySelectorAll(`td`);
     td.forEach((item) => {
       item.classList.remove("selected");
     });
-    crossOutNumbers = [];
+    let currentInfo = getCurrentInfo();
+    currentInfo.crossOutNumbers = [];
     // Guardar en local storage
-    setCrossOutNumbers(crossOutNumbers);
+    setCrossOutNumbers(currentInfo.crossOutNumbers);
     setTotalNumbers();
+    formContainer.classList.toggle("active");
   }
 });
+
+btnCleanForm.addEventListener("click",()=> 
+  cleanFormData()
+);
 
 btnToggleSidebar.addEventListener("click", () => {
   formContainer.classList.toggle("active");
@@ -118,16 +129,14 @@ btnToggleSidebar.addEventListener("click", () => {
 form.addEventListener("submit", function (e) {
   e.preventDefault();
 
-  var formData = new FormData(form);
+  formData = new FormData(form);
   const title = formData.get("title");
   const description = formData.get("description");
   const totalNumbers = formData.get("total-numbers");
   const ticketValue = formData.get("ticket-value");
+  const startFromZero = formData.get("start-zero");
   const prize = formData.get("prize");
   const date = formData.get("date");
-
-  console.log(description, totalNumbers
-, ticketValue);
   
   if (title === "" || description === "" || totalNumbers === "" || ticketValue === "" || prize === "" || date === "") {
     alert("Todos los campos son obligatorios");
@@ -153,10 +162,11 @@ form.addEventListener("submit", function (e) {
     ticketValue,
     prize,
     date,
-    startFromZero: true,
+    startFromZero: startFromZero === "true" ? true : false,
     crossOutNumbers: [],
     
   };
+  
   localStorage.setItem("info", JSON.stringify(info));
   setCurrentData();
   cleanFormData();
@@ -170,6 +180,7 @@ function generateTable(n) {
   let currentInfo = getCurrentInfo();
   let crossOutNumbers = currentInfo.crossOutNumbers;
   tableContainer.innerHTML = "";
+  // let c = currentInfo.startFromZero ? 1 : 0;
 
   const columns = Math.ceil(Math.sqrt(n));
   const rows = Math.ceil(n / columns);
@@ -177,7 +188,7 @@ function generateTable(n) {
   const table = document.createElement("table");
   for (let r = 0; r < rows; r++) {
     const tr = document.createElement("tr");
-    for (let c = 0; c < columns; c++) {
+    for (let c  = 0; c < columns; c++) {
       const index = r * columns + c;
       const td = document.createElement("td");
       crossOutNumbers.includes(index)
@@ -193,6 +204,8 @@ function generateTable(n) {
   }
 
   tableContainer.appendChild(table);
+  localStorage.setItem("tableGenerated", true);
+  formContainer.classList.toggle("active");
 }
 
 const refreshCrossOutNumbers = () => {
@@ -242,9 +255,12 @@ const setTotalNumbers =()=>{
 }
 
 const cleanFormData =()=>{
+
+  form.reset();
   formData.forEach(item=>{
-    item.value = "";
-  })
+    item.valueOf = "";
+  });
+  
 }
 
 const getCurrentInfo = ()=>{
